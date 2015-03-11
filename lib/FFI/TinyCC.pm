@@ -496,6 +496,7 @@ sub get_symbol
   unless($self->{relocate})
   {
     my $size = _relocate($self, undef);
+    die FFI::TinyCC::Exception->new($self) if $size == -1;
     $self->{store} = malloc($size);
     my $r = _relocate($self, $self->{store});
     FFI::TinyCC::Exception->new($self) if $r == -1;
