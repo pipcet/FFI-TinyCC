@@ -356,6 +356,8 @@ sub detect_sysinclude_path
     croak "Cannot detect sysinclude path";
   }
   
+  croak "Cannot detect sysinclude path" unless grep { -d $_ } @path_list;
+  
   $self->add_sysinclude_path($_) for @path_list;
   
   @path_list;
@@ -499,7 +501,7 @@ sub get_symbol
     die FFI::TinyCC::Exception->new($self) if $size == -1;
     $self->{store} = malloc($size);
     my $r = _relocate($self, $self->{store});
-    FFI::TinyCC::Exception->new($self) if $r == -1;
+    die FFI::TinyCC::Exception->new($self) if $r == -1;
     $self->{relocate} = 1;
   }
   _get_symbol($self, $symbol_name);
